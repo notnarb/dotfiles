@@ -23,21 +23,37 @@
 									'(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" 
 									   1 font-lock-warning-face prepend))))) 
 
-;; auto js2-mode
-(add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
-;; auto ac2-mode
-;; (add-hook 'js2-mode-hook 'ac-js2-mode)
+(when (require 'js2-mode nil 'noerror)
+  ;; auto js2-mode
+  (add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
 
-;; Tern mode
-(add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-(add-hook 'js2-mode-hook (lambda () (auto-complete-mode t)))
-(add-hook 'js2-mode-hook (lambda () (require 'js2-refactor)))
-(eval-after-load 'tern
-   '(progn
-      (require 'tern-auto-complete)
-      (tern-ac-setup)))
-(js2r-add-keybindings-with-prefix "C-c C-m")
-(add-hook 'js2-mode-hook (lambda () (flycheck-mode t)))
+  ;; auto ac2-mode
+  ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
+  
+  (when (require 'tern nil 'noerror)
+	(when (require 'tern-auto-complete nil 'noerror)
+	  (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+	  (add-hook 'js2-mode-hook (lambda () (auto-complete-mode t)))
+
+	  (eval-after-load 'tern
+		'(progn
+		   (require 'tern-auto-complete)
+		   (tern-ac-setup)))			;after tern is loaded, run the auto complete setup
+
+	  );end require tern
+	)  
+  (when (require 'flycheck nil 'noerror)
+  	(add-hook 'js2-mode-hook (lambda () (flycheck-mode t)))
+  	);end require flycheck-mode
+
+) ;end require js2-mode
+
+;; (add-hook 'js2-mode-hook (lambda () (require 'js2-refactor)))
+
+;; (when (require 'js2-refactor nil 'noerror) 
+;;   (js2r-add-keybindings-with-prefix "C-c C-m")
+
+;; )
 
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
@@ -65,7 +81,7 @@
 
 (load-theme 'zenburn t)
 (setq tab-width 4)
-(smart-tabs-advice js2-indent-line js2-basic-offset)
+;; (smart-tabs-advice js2-indent-line js2-basic-offset)
 
 ;; http://stackoverflow.com/questions/915985/in-emacs-how-to-line-up-equals-signs-in-a-series-of-initialization-statements
 (defadvice align-regexp (around align-regexp-with-spaces)
@@ -83,5 +99,3 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-(put 'ac-js2-mode 'disabled nil)
-(put 'auto-complete-mode 'disabled nil)
