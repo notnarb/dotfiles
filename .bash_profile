@@ -9,6 +9,10 @@ fi
 
 # PATH=$PATH:$HOME/bin:/sbin:/usr/sbin/
 
+if [ -d "$HOME/bin" ] ; then
+	PATH=$PATH:$HOME/bin
+fi
+
 # safe rm
 alias delete='mv -t /tmp/.Trash/'
 
