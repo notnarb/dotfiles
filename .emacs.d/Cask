@@ -3,6 +3,7 @@
 (source marmalade)
 
 (depends-on "ac-js2")
+(depends-on "ace-jump-mode")
 (depends-on "anything")
 (depends-on "auto-complete")
 (depends-on "cask")
@@ -25,6 +26,7 @@
 (depends-on "perl-completion")
 (depends-on "pkg-info")
 (depends-on "popup")
+(depends-on "restclient")
 (depends-on "s")
 (depends-on "shut-up")
 (depends-on "simple-httpd")
