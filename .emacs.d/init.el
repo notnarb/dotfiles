@@ -39,6 +39,15 @@
   (global-set-key (kbd "C-o") 'ace-jump-mode)
 )
 
+(when (require 'typescript-mode nil 'noerror)
+  (add-hook 'typescript-mode-hook
+			(lambda()
+			  (tide-setup)
+			  (flycheck-mode +1)
+			  (eldoc-mode +1)
+			  (company-mode +1)
+			  )))
+
 (when (require 'js2-mode nil 'noerror)
   ;; auto js2-mode
   (add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
