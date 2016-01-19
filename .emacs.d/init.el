@@ -11,74 +11,48 @@
 (package-initialize)
 
 (setq inhibit-startup-message t)
-
-(defun command-line-diff (switch)
-  (let ((file1 (pop command-line-args-left))
-		(file2 (pop command-line-args-left)))
-	(ediff file1 file2)))
-
-(add-to-list 'command-switch-alist '("diff" . command-line-diff))
-
-;; Usage: emacs -diff file1 file2
-
 ;; Highlight TODO FIXME XXX BUG
 (add-hook 'prog-mode-hook 
 		  (lambda()
 			(font-lock-add-keywords nil 
 									'(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" 
 									   1 font-lock-warning-face prepend))))) 
-(yas-global-mode 1)
-(define-key yas-minor-mode-map (kbd "<backtab>") 'yas-insert-snippet)
-;; (when (require 'yasnippet nil 'noerror)
-;;   ;; (define-key yas-minor-mode-map (kbd "<tab>") nil)
-;;   ;; (define-key yas-minor-mode-map (kbd "TAB") nil)
 
 ;; )
 
-(when (require 'ace-jump-mode nil 'noerror)
-  (global-set-key (kbd "C-o") 'ace-jump-mode)
-)
+(require 'use-package)
 
-(when (require 'typescript-mode nil 'noerror)
+(use-package ace-jump-mode
+  :defer t
+  :bind ("C-o" . ace-jump-mode))
+
+(use-package typescript-mode
+  :defer t
+  :init 
   (add-hook 'typescript-mode-hook
 			(lambda()
 			  (tide-setup)
 			  (flycheck-mode +1)
 			  (eldoc-mode +1)
-			  (company-mode +1)
-			  )))
+			  (company-mode +1))))
 
-(when (require 'js2-mode nil 'noerror)
-  ;; auto js2-mode
-  (add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
+(use-package js2-mode
+  :defer t
+  :init
+  (progn
+	(add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
+	(use-package tern-auto-complete
+	  :init (progn
+			  (add-hook 'js2-mode-hook 'tern-mode)
+			  (add-hook 'js2-mode-hook 'auto-complete-mode))
+	  :config (tern-ac-setup))
+	(use-package flycheck
+	  :init (add-hook 'js2-mode-hook 'flycheck-mode))))
 
-  ;; auto ac2-mode
-  ;; (add-hook 'js2-mode-hook 'ac-js2-mode)
-  
-  (when (require 'tern nil 'noerror)
-	(when (require 'tern-auto-complete nil 'noerror)
-	  (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
-	  (add-hook 'js2-mode-hook (lambda () (auto-complete-mode t)))
-
-	  (eval-after-load 'tern
-		'(progn
-		   (require 'tern-auto-complete)
-		   (tern-ac-setup)))			;after tern is loaded, run the auto complete setup
-
-	  );end require tern
-	)  
-  (when (require 'flycheck nil 'noerror)
-  	(add-hook 'js2-mode-hook (lambda () (flycheck-mode t)))
-  	);end require flycheck-mode
-
-) ;end require js2-mode
-
-;; (add-hook 'js2-mode-hook (lambda () (require 'js2-refactor)))
-
-;; (when (require 'js2-refactor nil 'noerror) 
-;;   (js2r-add-keybindings-with-prefix "C-c C-m")
-
-;; )
+(use-package yasnippet
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
 
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
@@ -102,8 +76,7 @@
  '(tab-width 4)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3")
- '(yas-snippet-dirs (quote ("~/.emacs.d/snippets")) nil (yasnippet)))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/.emacs.d/autosaves/" t)
