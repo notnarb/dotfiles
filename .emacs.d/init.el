@@ -26,6 +26,22 @@
   :defer t
   :bind ("C-o" . ace-jump-mode))
 
+(use-package company
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'company-mode))
+
+(use-package eldoc
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
+
+(use-package ido
+  :config
+  (ido-mode 1)
+  (ido-everywhere 1))
+
+(use-package neotree
+  :bind ("<f8>" . neotree-toggle))
+
 (use-package typescript-mode
   :defer t
   :init 
@@ -35,6 +51,9 @@
 			  (flycheck-mode +1)
 			  (eldoc-mode +1)
 			  (company-mode +1))))
+
+(use-package magit
+  :bind ("C-x g" . magit-status))
 
 (use-package js2-mode
   :defer t
