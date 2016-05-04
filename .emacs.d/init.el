@@ -79,6 +79,9 @@
    'org-babel-load-languages
    '((sh . t))))						;allow shell scripts to be executed in org mode
 
+(use-package editorconfig
+  :config (editorconfig-mode 1))
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

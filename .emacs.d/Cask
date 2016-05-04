@@ -12,6 +12,7 @@
 (depends-on "company")
 (depends-on "dash")
 (depends-on "dockerfile-mode")
+(depends-on "editorconfig")
 (depends-on "epl")
 (depends-on "evil")
 (depends-on "f")
