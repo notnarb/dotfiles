@@ -3,13 +3,6 @@
 (require 'pallet)
 (pallet-mode t)
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives 
-    '("marmalade" .
-      "http://marmalade-repo.org/packages/"))
-(package-initialize)
-
 (setq inhibit-startup-message t)
 ;; Highlight TODO FIXME XXX BUG
 (add-hook 'prog-mode-hook 
