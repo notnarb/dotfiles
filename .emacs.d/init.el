@@ -75,6 +75,21 @@
 (use-package editorconfig
   :config (editorconfig-mode 1))
 
+(use-package multiple-cursors
+  :bind (("C-c m m" . mc/edit-lines)
+		 ("C-c m n" . mc/mark-next-like-this-word)))
+
+(defun notnarb/init-projectile-with-c-p ()
+  "Starts projectile-global-mode and enters 'C-c p'"
+  (interactive)
+  (projectile-global-mode)
+  (setq unread-command-events (listify-key-sequence (kbd "C-c p"))))
+
+(use-package projectile
+  ;; Start projectile mode on first use of "C-c p" since projectile mode doesn't
+  ;; work well in some scenarios (e.g. sshfs mounts)
+  :bind("C-c p" . notnarb/init-projectile-with-c-p))
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
