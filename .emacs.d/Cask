@@ -1,5 +1,4 @@
 (source gnu)
-(source marmalade)
 (source melpa)
 (source melpa-stable)
 (source org)
@@ -14,6 +13,7 @@
 (depends-on "dash")
 (depends-on "dockerfile-mode")
 (depends-on "editorconfig")
+(depends-on "ensime")
 (depends-on "epl")
 (depends-on "evil")
 (depends-on "f")

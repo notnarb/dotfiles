@@ -90,6 +90,10 @@
   ;; work well in some scenarios (e.g. sshfs mounts)
   :bind("C-c p" . notnarb/init-projectile-with-c-p))
 
+(use-package ensime
+  :init (add-hook 'scala-mode-hook 'ensime-mode)
+  :commands ensime ensime-mode)
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
