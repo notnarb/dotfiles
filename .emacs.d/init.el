@@ -70,7 +70,10 @@
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((sh . t))))						;allow shell scripts to be executed in org mode
+   '(
+	 (sh . t)					 ;allow shell scripts to be executed in org mode
+	 (shell . t)				 ;allow bash scripts to be executed in org mode (could be redundant)
+	 )))
 
 (use-package editorconfig
   :config (editorconfig-mode 1))
@@ -93,6 +96,12 @@
 (use-package ensime
   :init (add-hook 'scala-mode-hook 'ensime-mode)
   :commands ensime ensime-mode)
+
+(use-package alchemist
+  :init
+  (progn
+	(add-hook 'elixir-mode-hook 'alchemist-mode)
+	(add-hook 'alchemist-mode-hook 'company-mode)))
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
