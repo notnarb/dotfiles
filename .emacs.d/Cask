@@ -47,7 +47,8 @@
 (depends-on "projectile")
 (depends-on "restclient")
 (depends-on "s")
-(depends-on "sbt-mode")
+;; Requires emacs-24.4 so save for manual installs
+;; (depends-on "sbt-mode")
 (depends-on "scala-mode")
 (depends-on "shut-up")
 (depends-on "simple-httpd")
