@@ -2,3 +2,8 @@ backups/
 .cask/
 auto-save-list
 ac-comphist.dat
+ido.last*
+autosaves
+tramp
+.org-id-locations
+projectile-bookmarks.eld

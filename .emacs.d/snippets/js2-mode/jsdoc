@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: jsdoc function header
+# key: jsd
+# --
+/**
+ * @desc $0
+ */

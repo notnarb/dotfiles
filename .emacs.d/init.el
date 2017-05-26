@@ -21,11 +21,16 @@
 
 (use-package company
   :config
-  (add-hook 'emacs-lisp-mode-hook 'company-mode))
+  (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  (add-hook 'css-mode-hook 'company-mode))
 
 (use-package eldoc
   :config
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
+
+(use-package helm
+  :defer t
+  :bind ("M-x" . helm-M-x))
 
 (use-package ido
   :config
@@ -35,15 +40,27 @@
 (use-package neotree
   :bind ("<f8>" . neotree-toggle))
 
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  ;; use local versions of tslint rather than global
+  (setq-local flycheck-typescript-tslint-executable
+			  (concat (locate-dominating-file "tslint.json" "tslint.json")
+					  "node_modules/.bin/tslint"))
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled idle-change))
+  (eldoc-mode +1)
+  (local-set-key (kbd "C-c C-r") 'tide-rename-symbol)
+  (company-mode +1))
+
 (use-package typescript-mode
   :defer t
-  :init 
-  (add-hook 'typescript-mode-hook
-			(lambda()
-			  (tide-setup)
-			  (flycheck-mode +1)
-			  (eldoc-mode +1)
-			  (company-mode +1))))
+  :init
+  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+  (add-hook 'web-mode-hook (lambda ()
+							 (when (string-equal "tsx" (file-name-extension buffer-file-name))
+							   (setup-tide-mode)))))
 
 (use-package magit
   :bind ("C-x g" . magit-status))
@@ -60,6 +77,11 @@
 	  :config (tern-ac-setup))
 	(use-package flycheck
 	  :init (add-hook 'js2-mode-hook 'flycheck-mode))))
+
+(use-package flycheck
+  :pin melpa-stable
+  :init (progn (add-hook 'sh-mode-hook 'flycheck-mode))
+  :config (flycheck-add-mode 'typescript-tslint 'web-mode))
 
 (use-package yasnippet
   :config
@@ -91,6 +113,7 @@
 (use-package projectile
   ;; Start projectile mode on first use of "C-c p" since projectile mode doesn't
   ;; work well in some scenarios (e.g. sshfs mounts)
+  :pin melpa-stable
   :bind("C-c p" . notnarb/init-projectile-with-c-p))
 
 (use-package ensime
@@ -122,6 +145,7 @@
  '(js2-skip-preprocessor-directives t)
  '(nxml-slash-auto-complete-flag t)
  '(tab-width 4)
+ '(tide-tsserver-executable "node_modules/typescript/bin/tsserver")
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
  '(vc-annotate-very-old-color "#DC8CC3"))

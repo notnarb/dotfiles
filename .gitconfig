@@ -2,3 +2,5 @@
 	name = Branton Horsley
 [push]
 	default = simple
+[branch]
+	autosetupmerge = always
