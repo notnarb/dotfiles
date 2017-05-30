@@ -1,3 +1,9 @@
+;;; notnarb/init.el --- My emacs configuration
+;;; Commentary:
+;;; Code:
+
+;; (package-initialize)
+
 (require 'cask "~/cask/cask.el")
 (cask-initialize)
 (require 'pallet)
@@ -5,11 +11,11 @@
 
 (setq inhibit-startup-message t)
 ;; Highlight TODO FIXME XXX BUG
-(add-hook 'prog-mode-hook 
+(add-hook 'prog-mode-hook
 		  (lambda()
-			(font-lock-add-keywords nil 
-									'(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):" 
-									   1 font-lock-warning-face prepend))))) 
+			(font-lock-add-keywords nil
+									'(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):"
+									   1 font-lock-warning-face prepend)))))
 
 ;; )
 
@@ -132,22 +138,49 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+ '(ansi-color-names-vector
+   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
  '(auto-save-file-name-transforms (quote ((".*" "~/.emacs.d/autosaves/\\1" t))))
  '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/"))))
- '(custom-safe-themes (quote ("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default)))
+ '(custom-safe-themes
+   (quote
+	("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default)))
  '(enable-local-variables nil)
  '(fci-rule-color "#383838")
  '(fill-column 80)
  '(js2-bounce-indent-p nil)
- '(js2-global-externs (quote ("$" "describe" "it" "before" "beforeEach" "after" "afterEach")))
+ '(js2-global-externs
+   (quote
+	("$" "describe" "it" "before" "beforeEach" "after" "afterEach")))
  '(js2-include-node-externs t)
  '(js2-skip-preprocessor-directives t)
  '(nxml-slash-auto-complete-flag t)
+ '(package-selected-packages
+   (quote
+	(zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2)))
  '(tab-width 4)
  '(tide-tsserver-executable "node_modules/typescript/bin/tsserver")
  '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map (quote ((20 . "#BC8383") (40 . "#CC9393") (60 . "#DFAF8F") (80 . "#D0BF8F") (100 . "#E0CF9F") (120 . "#F0DFAF") (140 . "#5F7F5F") (160 . "#7F9F7F") (180 . "#8FB28F") (200 . "#9FC59F") (220 . "#AFD8AF") (240 . "#BFEBBF") (260 . "#93E0E3") (280 . "#6CA0A3") (300 . "#7CB8BB") (320 . "#8CD0D3") (340 . "#94BFF3") (360 . "#DC8CC3"))))
+ '(vc-annotate-color-map
+   (quote
+	((20 . "#BC8383")
+	 (40 . "#CC9393")
+	 (60 . "#DFAF8F")
+	 (80 . "#D0BF8F")
+	 (100 . "#E0CF9F")
+	 (120 . "#F0DFAF")
+	 (140 . "#5F7F5F")
+	 (160 . "#7F9F7F")
+	 (180 . "#8FB28F")
+	 (200 . "#9FC59F")
+	 (220 . "#AFD8AF")
+	 (240 . "#BFEBBF")
+	 (260 . "#93E0E3")
+	 (280 . "#6CA0A3")
+	 (300 . "#7CB8BB")
+	 (320 . "#8CD0D3")
+	 (340 . "#94BFF3")
+	 (360 . "#DC8CC3"))))
  '(vc-annotate-very-old-color "#DC8CC3"))
 
 ;; create the autosave dir if necessary, since emacs won't.
@@ -162,7 +195,7 @@
 (defadvice align-regexp (around align-regexp-with-spaces)
   "Never use tabs for alignment."
   (let ((indent-tabs-mode nil))
-    ad-do-it))
+	ad-do-it))
 (ad-activate 'align-regexp)
 
 (global-set-key (kbd "C-c .") 'align-regexp)
