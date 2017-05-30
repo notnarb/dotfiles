@@ -1,5 +1,7 @@
 [user]
 	name = Branton Horsley
+	# Note: put email in /etc/gitconfig so I can separate work and personal
+	# computers by assigning them a work or personal email address
 [push]
 	default = simple
 [branch]
