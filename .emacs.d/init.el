@@ -207,5 +207,5 @@
  )
 (put 'dired-find-alternate-file 'disabled nil)
 
-(provide init.el)
+;; (provide init.el)
 ;;; init.el ends here
