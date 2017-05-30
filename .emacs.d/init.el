@@ -54,6 +54,10 @@
 					  "node_modules/.bin/tslint"))
   (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled idle-change))
+  ;; Add these two lines to support tslint in web-mode
+  ;; https://github.com/ananthakumaran/tide/issues/95
+  (flycheck-add-next-checker 'tsx-tide '(warning . typescript-tslint) 'append)
+  (flycheck-add-mode 'typescript-tslint 'web-mode)
   (eldoc-mode +1)
   (local-set-key (kbd "C-c C-r") 'tide-rename-symbol)
   (company-mode +1))
