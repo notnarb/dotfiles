@@ -10,14 +10,12 @@
 (pallet-mode t)
 
 (setq inhibit-startup-message t)
-;; Highlight TODO FIXME XXX BUG
-(add-hook 'prog-mode-hook
-		  (lambda()
-			(font-lock-add-keywords nil
-									'(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):"
-									   1 font-lock-warning-face prepend)))))
 
-;; )
+(defun notnarb/add-keywords ()
+  "Highlight TODO FIXME XXX BUG."
+  (font-lock-add-keywords nil '(("\\<\\(FIXME\\|TODO\\|XXX+\\|BUG\\):"
+								 1 font-lock-warning-face prepend))))
+(add-hook 'prog-mode-hook 'notnarb/add-keywords)
 
 (require 'use-package)
 
@@ -46,7 +44,8 @@
 (use-package neotree
   :bind ("<f8>" . neotree-toggle))
 
-(defun setup-tide-mode ()
+(defun notnarb/setup-tide-mode ()
+  "Add hooks and modes for tide-mode."
   (interactive)
   (tide-setup)
   ;; use local versions of tslint rather than global
@@ -62,7 +61,7 @@
 (use-package typescript-mode
   :defer t
   :init
-  (add-hook 'typescript-mode-hook #'setup-tide-mode)
+  (add-hook 'typescript-mode-hook #'notnarb/setup-tide-mode)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   (add-hook 'web-mode-hook (lambda ()
 							 (when (string-equal "tsx" (file-name-extension buffer-file-name))
@@ -111,7 +110,7 @@
 		 ("C-c m n" . mc/mark-next-like-this-word)))
 
 (defun notnarb/init-projectile-with-c-p ()
-  "Starts projectile-global-mode and enters 'C-c p'"
+  "Start projectile-global-mode and enter (kbd 'C-c p') key sequence."
   (interactive)
   (projectile-global-mode)
   (setq unread-command-events (listify-key-sequence (kbd "C-c p"))))
@@ -207,3 +206,6 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'dired-find-alternate-file 'disabled nil)
+
+(provide init.el)
+;;; init.el ends here
