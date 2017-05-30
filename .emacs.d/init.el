@@ -65,7 +65,7 @@
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   (add-hook 'web-mode-hook (lambda ()
 							 (when (string-equal "tsx" (file-name-extension buffer-file-name))
-							   (setup-tide-mode)))))
+							   (notnarb/setup-tide-mode)))))
 
 (use-package magit
   :bind ("C-x g" . magit-status))
@@ -128,6 +128,7 @@
 (use-package alchemist
   :init
   (progn
+	(add-hook 'elixir-mode-hook 'flycheck-mode)
 	(add-hook 'elixir-mode-hook 'alchemist-mode)
 	(add-hook 'alchemist-mode-hook 'company-mode)))
 
