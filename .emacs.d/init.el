@@ -2,12 +2,26 @@
 ;;; Commentary:
 ;;; Code:
 
+;; benchmark init via https://github.com/dholm/benchmark-init-el
+;; (add-to-list 'load-path "~/vendor/benchmark-init-el")
+;; (require 'benchmark-init-loaddefs)
+;; (benchmark-init/activate)
+
+(defconst emacs-start-time (current-time))
+
+(defconst notnarb/default-cons-threshold 800000)
+;; Turn off GC during initialization: appears to reduce startup time by almost 50%
+;; (1.7s => .9s, .75s => .5s)
+(setq gc-cons-threshold most-positive-fixnum)
+
 ;; (package-initialize)
 
 (require 'cask "~/cask/cask.el")
 (cask-initialize)
-(require 'pallet)
-(pallet-mode t)
+
+(use-package pallet
+  :defer t
+  :config (pallet-mode t))
 
 (setq inhibit-startup-message t)
 
@@ -24,16 +38,24 @@
   :bind ("C-o" . ace-jump-mode))
 
 (use-package company
-  :config
-  (add-hook 'emacs-lisp-mode-hook 'company-mode)
+  :diminish company-mode
+  :commands company-mode)
+
+(use-package css-mode
+  :defer t
+  :init
   (add-hook 'css-mode-hook 'company-mode))
 
-(use-package eldoc
-  :config
+(use-package elisp-mode
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'company-mode)
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode))
 
-(use-package helm
+(use-package eldoc
   :defer t
+  :diminish eldoc-mode)
+
+(use-package helm
   :bind ("M-x" . helm-M-x))
 
 (use-package ido
@@ -64,7 +86,14 @@
 
 (use-package typescript-mode
   :defer t
+  :mode (("\\.ts\\'" . typescript-mode)
+		 ("\\.tsx\\'" . web-mode))
+  :pin melpa-stable
   :init
+  (use-package tide
+	:diminish tide-mode
+	:defer t
+	:pin melpa-stable)
   (add-hook 'typescript-mode-hook #'notnarb/setup-tide-mode)
   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
   (add-hook 'web-mode-hook (lambda ()
@@ -75,29 +104,34 @@
   :bind ("C-x g" . magit-status))
 
 (use-package js2-mode
-  :defer t
+  ;; TODO: verify that this configuration is right
+  :mode "\\.jsx?\\'"
   :init
-  (progn
-	(add-to-list 'auto-mode-alist (cons (rx ".js" eos) 'js2-mode))
-	(use-package tern-auto-complete
-	  :init (progn
-			  (add-hook 'js2-mode-hook 'tern-mode)
-			  (add-hook 'js2-mode-hook 'auto-complete-mode))
-	  :config (tern-ac-setup))
-	(use-package flycheck
-	  :init (add-hook 'js2-mode-hook 'flycheck-mode))))
+  (add-hook 'js2-mode-hook 'tern-mode)
+  (add-hook 'js2-mode-hook 'auto-complete-mode)
+  (add-hook 'js2-mode-hook 'tern-ac-setup)
+  (add-hook 'js2-mode-hook 'flycheck-mode)
+  (use-package tern-auto-complete
+	:commands tern-mode)
+  (use-package tern
+	:defer t
+	:diminish tern-mode))
 
 (use-package flycheck
+  :commands flycheck-mode
   :pin melpa-stable
   :init (progn (add-hook 'sh-mode-hook 'flycheck-mode))
   :config (flycheck-add-mode 'typescript-tslint 'web-mode))
 
 (use-package yasnippet
+  :diminish yas-minor-mode
+  :defer 2
   :config
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1))
 
 (use-package org
+  :mode ("\\.org'\\' . org-mode")
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -107,6 +141,7 @@
 	 )))
 
 (use-package editorconfig
+  :diminish editorconfig-mode
   :config (editorconfig-mode 1))
 
 (use-package multiple-cursors
@@ -130,6 +165,7 @@
   :commands ensime ensime-mode)
 
 (use-package alchemist
+  :mode ("\\.exs?\\'" . elixir-mode)
   :init
   (progn
 	(add-hook 'elixir-mode-hook 'flycheck-mode)
@@ -212,5 +248,14 @@
  )
 (put 'dired-find-alternate-file 'disabled nil)
 
+;; stolen from https://github.com/jwiegley/dot-emacs/blob/master/init.el
+(add-hook 'after-init-hook
+		  `(lambda ()
+			 (let ((elapsed (float-time (time-subtract (current-time)
+													   emacs-start-time))))
+			   (message "Loading %s...done (%.3fs) [after-init]"
+						,load-file-name elapsed))))
+;; set gc threshold back to original value
+(setq gc-cons-threshold notnarb/default-cons-threshold)
 ;; (provide init.el)
 ;;; init.el ends here
