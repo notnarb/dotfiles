@@ -42,7 +42,6 @@
 (depends-on "org-plus-contrib")
 (depends-on "package-build")
 (depends-on "pallet")
-(depends-on "perl-completion")
 (depends-on "pkg-info")
 (depends-on "popup")
 (depends-on "projectile")
