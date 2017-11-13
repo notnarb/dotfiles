@@ -188,6 +188,7 @@
  '(enable-local-variables nil)
  '(fci-rule-color "#383838")
  '(fill-column 80)
+ '(ispell-personal-dictionary "~/.emacs.d/aspell.en.pws")
  '(js2-bounce-indent-p nil)
  '(js2-global-externs
    (quote
