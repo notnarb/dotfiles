@@ -1,0 +1,35 @@
+* notnarb/dotfiles
+  Collection of my dotfiles, mostly for emacs usage
+
+** Docker image
+   [[https://hub.docker.com/r/notnarb/dotfiles/][file:https://img.shields.io/docker/build/notnarb/dotfiles.svg]]
+   [[https://hub.docker.com/r/notnarb/dotfiles/][file:https://img.shields.io/docker/automated/notnarb/dotfiles.svg]]
+
+   To run a portable version of these dotfiles with emacs and tmux included, run:
+
+   #+BEGIN_SRC shell
+   docker run -it notnarb/dotfiles
+   #+END_SRC
+
+*** Usage examples
+
+	Mount current directory (in ~/w/) as current (host) user:
+
+	#+BEGIN_SRC shell
+	sudo docker run -it -v $PWD:/root/w/ -e PUID=$UID notnarb/dotfiles
+	#+END_SRC
+
+	Same as above but also allow ssh forwarding from host:
+
+	#+BEGIN_SRC shell
+	sudo docker run -it -v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK -v $PWD:/root/w/ -e PUID=$UID notnarb/dotfiles
+	#+END_SRC
+
+*** Advanced usage
+
+	Setting 'PUID' will automatically create a user with the same user id within
+	the container and su's to that user.  This allows you to edit files within
+	the container as if you were the user running the command.
+
+	(There's probably a better way to do this, but this works well enough for
+	me!)
