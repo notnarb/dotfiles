@@ -133,12 +133,22 @@
 (use-package org
   :mode ("\\.org'\\' . org-mode")
   :config
+  (use-package ox-jira)
+  (use-package ox-gfm)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
-	 (sh . t)					 ;allow shell scripts to be executed in org mode
 	 (shell . t)				 ;allow bash scripts to be executed in org mode (could be redundant)
+	 (plantuml . t)
 	 )))
+
+(use-package plantuml-mode
+  :config
+  (setq org-plantuml-jar-path (expand-file-name "~/plantuml.jar")))
+
+(use-package ag
+  :config
+  (setq ag-reuse-buffers 't))
 
 (use-package editorconfig
   :diminish editorconfig-mode
