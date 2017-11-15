@@ -1,7 +1,8 @@
+#!/bin/bash
 usage () {
 	local SSH_PIECE='-v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK'
-	echo -e 'Normal Usage:\nsudo docker run -it -v $PWD:/root/w/ -e PUID=$UID notnarb/env'
-	echo -e 'SSH Usage:\nsudo docker run -it '$SSH_PIECE' -v $PWD:/root/w/ -e PUID=$UID notnarb/env'
+	echo -e 'Normal Usage:\nsudo docker run -it -v $PWD:/root/w/ -e PUID=$UID notnarb/dotfiles'
+	echo -e 'SSH Usage:\nsudo docker run -it '$SSH_PIECE' -v $PWD:/root/w/ -e PUID=$UID notnarb/dotfiles'
 }
 setup () {
 	local USER=$1
