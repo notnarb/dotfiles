@@ -15,6 +15,6 @@ RUN umask 000 && \
 	~/cask/bin/cask install && \
 	apk del --no-cache python && \
 	rm -rf $(find ~/cask/ -mindepth 1 | grep -v cask.el | grep -v cask-bootstrap)
-COPY docker-helpers/.bashrc /root/.bashrc
+COPY docker-helpers/bashrc /root/.bashrc
 ENV TERM xterm-256color
 CMD /bin/bash
