@@ -1,0 +1,24 @@
+usage () {
+	local SSH_PIECE='-v $(dirname $SSH_AUTH_SOCK):$(dirname $SSH_AUTH_SOCK) -e SSH_AUTH_SOCK=$SSH_AUTH_SOCK'
+	echo -e 'Normal Usage:\nsudo docker run -it -v $PWD:/root/w/ -e PUID=$UID notnarb/env'
+	echo -e 'SSH Usage:\nsudo docker run -it '$SSH_PIECE' -v $PWD:/root/w/ -e PUID=$UID notnarb/env'
+}
+setup () {
+	local USER=$1
+	if [[ ! $USER ]]; then
+		echo "could not figure out user"
+		return 1;
+	fi
+	adduser -h /root/ -s /bin/bash -D -H -u $USER $USER || echo user already created, continuing
+	su $USER
+	exit 0;
+}
+
+if [[ $UID == 0 && ! $PUID && ! $SSH_AUTH_SOCK && ! -d ~/w/ ]]; then
+	usage
+fi
+
+if [[ $UID == 0 && $PUID ]]; then
+	echo "Logging in as $PUID"
+	setup $PUID
+fi
