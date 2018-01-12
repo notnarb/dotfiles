@@ -182,6 +182,16 @@
 	(add-hook 'elixir-mode-hook 'alchemist-mode)
 	(add-hook 'alchemist-mode-hook 'company-mode)))
 
+(use-package anaconda-mode
+  :defer t
+  :init
+  (eval-after-load "company"
+	'(add-to-list 'company-backends 'company-anaconda))
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+  (add-hook 'python-mode-hook 'company-mode)
+  (add-hook 'python-mode-hook 'flycheck-mode))
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
