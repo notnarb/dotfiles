@@ -133,6 +133,7 @@
 (use-package org
   :mode ("\\.org'\\' . org-mode")
   :config
+  (add-hook 'org-mode-hook (lambda () (setq org-src-preserve-indentation t)))
   (use-package ox-jira)
   (use-package ox-gfm)
   (org-babel-do-load-languages
@@ -140,6 +141,7 @@
    '(
 	 (shell . t)				 ;allow bash scripts to be executed in org mode (could be redundant)
 	 (plantuml . t)
+	 (python . t)
 	 )))
 
 (use-package plantuml-mode
@@ -190,7 +192,15 @@
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
   (add-hook 'python-mode-hook 'company-mode)
-  (add-hook 'python-mode-hook 'flycheck-mode))
+  (add-hook 'python-mode-hook 'flycheck-mode)
+  (add-hook 'python-mode-hook (lambda () (setq fill-column 79)))
+  (use-package flycheck-mypy))
+
+(use-package pytest
+  :defer t
+  :init
+  (add-hook 'python-mode-hook (lambda ()
+								(local-set-key "\C-ca" 'pytest-all))))
 
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
@@ -218,7 +228,7 @@
  '(nxml-slash-auto-complete-flag t)
  '(package-selected-packages
    (quote
-	(zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2)))
+	(py-yapf flycheck-mypy pytest pyenv-mode company-anaconda lsp-python company-lsp zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2)))
  '(tab-width 4)
  '(tide-tsserver-executable "node_modules/typescript/bin/tsserver")
  '(vc-annotate-background "#2B2B2B")
