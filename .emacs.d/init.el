@@ -194,7 +194,8 @@
   (add-hook 'python-mode-hook 'company-mode)
   (add-hook 'python-mode-hook 'flycheck-mode)
   (add-hook 'python-mode-hook (lambda () (setq fill-column 79)))
-  (use-package flycheck-mypy))
+  ;; (use-package flycheck-mypy) ; currently unused
+  )
 
 (use-package pytest
   :defer t
