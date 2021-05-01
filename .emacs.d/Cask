@@ -23,6 +23,7 @@
 (depends-on "evil")
 (depends-on "f")
 (depends-on "flycheck")
+(depends-on "go-mode")
 (depends-on "groovy-mode")
 (depends-on "handlebars-mode")
 (depends-on "helm")
@@ -44,7 +45,9 @@
 (depends-on "org-plus-contrib")
 (depends-on "ox-gfm")
 (depends-on "ox-jira")
-(depends-on "package-build")
+(depends-on "lsp-mode")
+(depends-on "lsp-ui")
+;; (depends-on "package-build") breaking cask install for some reason
 (depends-on "pallet")
 (depends-on "pkg-info")
 (depends-on "plantuml-mode")

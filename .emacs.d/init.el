@@ -14,8 +14,8 @@
 ;; (1.7s => .9s, .75s => .5s)
 (setq gc-cons-threshold most-positive-fixnum)
 
-;; (package-initialize)
-
+;; https://github.com/cask/cask/issues/463#issuecomment-794249642
+(setq warning-suppress-log-types '((package reinitialization)))
 (require 'cask "~/cask/cask.el")
 (cask-initialize)
 
@@ -119,7 +119,7 @@
 
 (use-package flycheck
   :commands flycheck-mode
-  :pin melpa-stable
+  :pin melpa
   :init (progn (add-hook 'sh-mode-hook 'flycheck-mode))
   :config (flycheck-add-mode 'typescript-tslint 'web-mode))
 
@@ -160,10 +160,30 @@
   :bind (("C-c m m" . mc/edit-lines)
 		 ("C-c m n" . mc/mark-next-like-this-word)))
 
+(use-package lsp-mode
+  :commands (lsp lsp-deferred))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode)
+
+(defun notnarb/setup-go-mode ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t)
+  (local-set-key (kbd "C-c C-r") 'lsp-rename)
+  )
+
+(use-package go-mode
+  :init
+  (add-hook 'go-mode-hook 'company-mode)
+  (add-hook 'go-mode-hook #'lsp-deferred)
+  (add-hook 'go-mode-hook #'notnarb/setup-go-mode))
+
 (defun notnarb/init-projectile-with-c-p ()
   "Start projectile-global-mode and enter (kbd 'C-c p') key sequence."
   (interactive)
   (projectile-global-mode)
+  ;; Needed as of 2.0.0
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq unread-command-events (listify-key-sequence (kbd "C-c p"))))
 
 (use-package projectile
