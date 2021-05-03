@@ -132,10 +132,19 @@
 
 (use-package org
   :mode ("\\.org'\\' . org-mode")
+  :bind (("C-c c" . org-capture)
+		 ("C-c a" . org-agenda))
   :config
   (add-hook 'org-mode-hook (lambda () (setq org-src-preserve-indentation t)))
   (use-package ox-jira)
   (use-package ox-gfm)
+  (setq org-capture-templates '(("t" "Todo [inbox]" entry
+								 (file+headline "~/org/inbox.org" "Tasks")
+								 "* TODO %i%?")
+								("j" "TIL [journal]" item
+								 (file+datetree "~/org/TIL.org")
+								 "%i%?")))
+
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(
@@ -176,7 +185,8 @@
   :init
   (add-hook 'go-mode-hook 'company-mode)
   (add-hook 'go-mode-hook #'lsp-deferred)
-  (add-hook 'go-mode-hook #'notnarb/setup-go-mode))
+  (add-hook 'go-mode-hook #'notnarb/setup-go-mode)
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 
 (defun notnarb/init-projectile-with-c-p ()
   "Start projectile-global-mode and enter (kbd 'C-c p') key sequence."
@@ -223,6 +233,10 @@
   (add-hook 'python-mode-hook (lambda ()
 								(local-set-key "\C-ca" 'pytest-all))))
 
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
 ;; Put autosave files (ie #foo#) and backup files (ie foo~) in ~/.emacs.d/.
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -247,6 +261,7 @@
  '(js2-include-node-externs t)
  '(js2-skip-preprocessor-directives t)
  '(nxml-slash-auto-complete-flag t)
+ '(org-agenda-files (quote ("~/org/inbox.org")))
  '(package-selected-packages
    (quote
 	(py-yapf flycheck-mypy pytest pyenv-mode company-anaconda lsp-python company-lsp zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2)))
