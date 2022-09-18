@@ -27,10 +27,6 @@
 
 (require 'use-package)
 
-(use-package pallet
-  :defer t
-  :config (pallet-mode t))
-
 (setq inhibit-startup-message t)
 
 (defun notnarb/add-keywords ()
@@ -72,7 +68,8 @@
   (ido-everywhere 1))
 
 (use-package neotree
-  :bind ("<f8>" . neotree-toggle))
+  :bind ("<f8>" . neotree-toggle)
+  :config (setq neo-window-width 45))
 
 (defun notnarb/setup-tide-mode ()
   "Add hooks and modes for tide-mode."
@@ -110,20 +107,6 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status))
-
-(use-package js2-mode
-  ;; TODO: verify that this configuration is right
-  :mode "\\.jsx?\\'"
-  :init
-  (add-hook 'js2-mode-hook 'tern-mode)
-  (add-hook 'js2-mode-hook 'auto-complete-mode)
-  (add-hook 'js2-mode-hook 'tern-ac-setup)
-  (add-hook 'js2-mode-hook 'flycheck-mode)
-  (use-package tern-auto-complete
-	:commands tern-mode)
-  (use-package tern
-	:defer t
-	:diminish tern-mode))
 
 (use-package flycheck
   :commands flycheck-mode
@@ -210,10 +193,6 @@
   :pin melpa-stable
   :bind("C-c p" . notnarb/init-projectile-with-c-p))
 
-(use-package ensime
-  :init (add-hook 'scala-mode-hook 'ensime-mode)
-  :commands ensime ensime-mode)
-
 (use-package alchemist
   :mode ("\\.exs?\\'" . elixir-mode)
   :init
@@ -261,38 +240,12 @@
  '(fci-rule-color "#383838")
  '(fill-column 80)
  '(ispell-personal-dictionary "~/.emacs.d/aspell.en.pws")
- '(js2-bounce-indent-p nil)
- '(js2-global-externs
-   '("$" "describe" "it" "before" "beforeEach" "after" "afterEach"))
- '(js2-include-node-externs t)
- '(js2-skip-preprocessor-directives t)
  '(nxml-slash-auto-complete-flag t)
  '(org-agenda-files '("~/org/inbox.org"))
  '(package-selected-packages
-   '(rust-mode hcl-mode systemd bazel-mode go-mode company-terraform terraform-mode py-yapf flycheck-mypy pytest pyenv-mode company-anaconda lsp-python company-lsp zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2))
+   '(hcl-mode systemd bazel-mode go-mode company-terraform terraform-mode py-yapf flycheck-mypy pytest pyenv-mode company-anaconda lsp-python company-lsp zenburn-theme yaml-mode web-mode use-package tt-mode tide smart-tabs-mode restclient projectile perl-completion org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode jinja2-mode htmlize helm groovy-mode evil editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode))
  '(tab-width 4)
  '(tide-tsserver-executable "node_modules/typescript/bin/tsserver")
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map
-   '((20 . "#BC8383")
-	 (40 . "#CC9393")
-	 (60 . "#DFAF8F")
-	 (80 . "#D0BF8F")
-	 (100 . "#E0CF9F")
-	 (120 . "#F0DFAF")
-	 (140 . "#5F7F5F")
-	 (160 . "#7F9F7F")
-	 (180 . "#8FB28F")
-	 (200 . "#9FC59F")
-	 (220 . "#AFD8AF")
-	 (240 . "#BFEBBF")
-	 (260 . "#93E0E3")
-	 (280 . "#6CA0A3")
-	 (300 . "#7CB8BB")
-	 (320 . "#8CD0D3")
-	 (340 . "#94BFF3")
-	 (360 . "#DC8CC3")))
- '(vc-annotate-very-old-color "#DC8CC3")
  '(warning-minimum-level :error)
  '(warning-suppress-log-types
    '(((editorconfig editorconfig--advice-find-file-noselect))
