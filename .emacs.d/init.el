@@ -190,7 +190,7 @@
 (use-package projectile
   ;; Start projectile mode on first use of "C-c p" since projectile mode doesn't
   ;; work well in some scenarios (e.g. sshfs mounts)
-  :pin melpa-stable
+  :commands (projectile-global-mode)
   :bind("C-c p" . notnarb/init-projectile-with-c-p))
 
 (use-package alchemist
