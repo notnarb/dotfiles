@@ -14,10 +14,18 @@
 ;; (1.7s => .9s, .75s => .5s)
 (setq gc-cons-threshold most-positive-fixnum)
 
-;; https://github.com/cask/cask/issues/463#issuecomment-794249642
-(setq warning-suppress-log-types '((package reinitialization)))
-(require 'cask "~/cask/cask.el")
-(cask-initialize)
+;; Manually configure package because the new Cask maintainers seem to not
+;; really want to support this use case anymore :(
+;; https://github.com/cask/cask/issues/463#issuecomment-912496111
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t)
+(package-initialize)
+;; Add all cask folders to the load path.
+(let ((default-directory (format "~/.emacs.d/.cask/%s/elpa" emacs-version)))
+  (normal-top-level-add-subdirs-to-load-path))
+
+(require 'use-package)
 
 (use-package pallet
   :defer t
@@ -245,32 +253,28 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(auto-save-file-name-transforms (quote ((".*" "~/.emacs.d/autosaves/\\1" t))))
- '(backup-directory-alist (quote ((".*" . "~/.emacs.d/backups/"))))
+ '(auto-save-file-name-transforms '((".*" "~/.emacs.d/autosaves/\\1" t)))
+ '(backup-directory-alist '((".*" . "~/.emacs.d/backups/")))
  '(custom-safe-themes
-   (quote
-	("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default)))
+   '("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" default))
  '(enable-local-variables nil)
  '(fci-rule-color "#383838")
  '(fill-column 80)
  '(ispell-personal-dictionary "~/.emacs.d/aspell.en.pws")
  '(js2-bounce-indent-p nil)
  '(js2-global-externs
-   (quote
-	("$" "describe" "it" "before" "beforeEach" "after" "afterEach")))
+   '("$" "describe" "it" "before" "beforeEach" "after" "afterEach"))
  '(js2-include-node-externs t)
  '(js2-skip-preprocessor-directives t)
  '(nxml-slash-auto-complete-flag t)
- '(org-agenda-files (quote ("~/org/inbox.org")))
+ '(org-agenda-files '("~/org/inbox.org"))
  '(package-selected-packages
-   (quote
-	(py-yapf flycheck-mypy pytest pyenv-mode company-anaconda lsp-python company-lsp zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2)))
+   '(rust-mode hcl-mode systemd bazel-mode go-mode company-terraform terraform-mode py-yapf flycheck-mypy pytest pyenv-mode company-anaconda lsp-python company-lsp zenburn-theme yaml-mode web-mode use-package tt-mode tide tern-auto-complete smart-tabs-mode restclient projectile perl-completion pallet org-plus-contrib nginx-mode neotree markdown-mode magit less-css-mode json-mode js2-refactor jinja2-mode htmlize helm handlebars-mode groovy-mode evil ensime editorconfig dumb-jump dockerfile-mode anything alchemist ag ace-jump-mode ac-js2))
  '(tab-width 4)
  '(tide-tsserver-executable "node_modules/typescript/bin/tsserver")
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
-   (quote
-	((20 . "#BC8383")
+   '((20 . "#BC8383")
 	 (40 . "#CC9393")
 	 (60 . "#DFAF8F")
 	 (80 . "#D0BF8F")
@@ -287,8 +291,13 @@
 	 (300 . "#7CB8BB")
 	 (320 . "#8CD0D3")
 	 (340 . "#94BFF3")
-	 (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
+	 (360 . "#DC8CC3")))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(warning-minimum-level :error)
+ '(warning-suppress-log-types
+   '(((editorconfig editorconfig--advice-find-file-noselect))
+	 (comp)))
+ '(warning-suppress-types '((comp))))
 
 ;; create the autosave dir if necessary, since emacs won't.
 (make-directory "~/.emacs.d/autosaves/" t)
